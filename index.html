@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumarizador de XML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #E3EAD9; /* Cor de fundo */
+        }
+        header {
+            background-color: #54675F;
+            color: white;
+            padding: 20px 0;
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        h2 {
+            color: #43564F; /* Cor do texto dos títulos */
+            margin-top: 40px;
+            font-size: 24px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #93A79F; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #54675F; /* Cor de fundo do botão ao passar o mouse */
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+            font-style: italic;
+            color: #54675F; /* Cor do texto da mensagem de carregamento */
+        }
+        .total {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #54675F; /* Cor do texto do total */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sumarizador de XML</h1>
+    </header>
+    <div class="container">
+        <!-- Seção para sumarizar XML de CF-e -->
+        <section>
+            <h2>Sumarizador de CF-e</h2>
+            <button onclick="sumarizarValoresCFE('sumarizar-cfe')">Sumarizar Valores (CF-e)</button>
+            <div id="loading-cfe" class="loading">Calculando... Aguarde.</div>
+            <div id="totalCFe" class="total">Total CF-e: </div>
+        </section>
+
+        <!-- Seção para sumarizar XML de NF-e -->
+        <section>
+            <h2>Sumarizador de NF-e</h2>
+            <button onclick="sumarizarValoresNFE('sumarizar-nfe')">Sumarizar Valores (NF-e)</button>
+            <div id="loading-nfe" class="loading">Calculando... Aguarde.</div>
+            <div id="totalNFe" class="total">Total NF-e: </div>
+        </section>
+    </div>
+
+    <script>
+        function sumarizarValoresCFE(endpoint) {
+            // Exibe a mensagem de carregamento
+            document.getElementById('loading-cfe').style.display = 'block';
+
+            // Chama a função em JavaScript para sumarizar valores
+            fetch(`/${endpoint}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Atualiza o elemento HTML com o total
+                    const elementId = endpoint === 'sumarizar-cfe' ? 'totalCFe' : 'totalNFe';
+                    document.getElementById(elementId).textContent = `Total CF-e: ${data.total}`;
+                })
+                .catch(error => console.error(`Erro ao sumarizar valores (${endpoint}):`, error))
+                .finally(() => {
+                    // Esconde a mensagem de carregamento
+                    document.getElementById('loading-cfe').style.display = 'none';
+                });
+        }
+    </script>
+
+    <script>
+        function sumarizarValoresNFE(endpoint) {
+            // Exibe a mensagem de carregamento
+            document.getElementById('loading-nfe').style.display = 'block';
+
+            // Chama a função em JavaScript para sumarizar valores
+            fetch(`/${endpoint}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Atualiza o elemento HTML com o total
+                    const elementId = endpoint === 'sumarizar-nfe' ? 'totalNFe' : 'totalCFe';
+                    document.getElementById(elementId).textContent = `Total NF-e: ${data.total}`;
+                })
+                .catch(error => console.error(`Erro ao sumarizar valores (${endpoint}):`, error))
+                .finally(() => {
+                    // Esconde a mensagem de carregamento
+                    document.getElementById('loading-nfe').style.display = 'none';
+                });
+        }
+    </script>
+</body>
+</html>
